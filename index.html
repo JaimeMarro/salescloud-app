@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SalesCloud App - Jaime v3.0</title>
+    <title>SalesCloud App - Jaime v3.1</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -57,12 +57,11 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <!-- FORMULARIO CON SELECTOR -->
+            <!-- FORMULARIO -->
             <div class="bg-white p-6 rounded-lg shadow-sm lg:col-span-1">
                 <h2 class="text-lg font-bold mb-4 border-b pb-2"><i class="fa-solid fa-pen-to-square text-blue-600"></i> Registrar Movimiento</h2>
                 
                 <form id="movimiento-form" class="space-y-4">
-                    <!-- Selector Tipo Movimiento -->
                     <div>
                         <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Tipo de Movimiento</label>
                         <div class="grid grid-cols-2 gap-2">
@@ -81,7 +80,6 @@
                     
                     <input type="text" id="concepto" placeholder="Concepto (ej. Venta 1 bolsa de dulces / Compra Paquete Arcor)" class="w-full rounded-md border-gray-300 shadow-sm border p-2 focus:ring-blue-500 focus:border-blue-500" required>
 
-                    <!-- Campos dinámicos para Venta -->
                     <div id="campo-venta-cant" class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs text-gray-500">Cantidad vendida</label>
@@ -93,7 +91,6 @@
                         </div>
                     </div>
 
-                    <!-- Campo Monto Total Directo (para Inversión o Venta Total) -->
                     <div>
                         <label class="block text-xs text-gray-500 font-semibold" id="label-monto">Monto Total Recibido ($)</label>
                         <input type="number" id="monto-total" step="0.01" min="0.01" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm border p-2 font-bold text-lg" required>
@@ -129,8 +126,19 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-4 text-right pt-2 border-t">
-                    <button onclick="limpiarDatos()" class="text-xs text-red-500 hover:underline"><i class="fa-solid fa-trash-can"></i> Reiniciar sistema (Capital $2.00)</button>
+
+                <!-- BOTONES DE EXPORTAR / IMPORTAR / RESET -->
+                <div class="mt-4 pt-3 border-t flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex gap-2">
+                        <button onclick="exportarDatos()" class="bg-blue-100 text-blue-700 hover:bg-blue-200 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1">
+                            <i class="fa-solid fa-download"></i> Exportar Datos
+                        </button>
+                        <button onclick="document.getElementById('import-file').click()" class="bg-gray-100 text-gray-700 hover:bg-gray-200 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1">
+                            <i class="fa-solid fa-upload"></i> Importar Datos
+                        </button>
+                        <input type="file" id="import-file" class="hidden" accept=".json" onchange="importarDatos(event)">
+                    </div>
+                    <button onclick="limpiarDatos()" class="text-xs text-red-500 hover:underline"><i class="fa-solid fa-trash-can"></i> Reiniciar sistema ($2.00)</button>
                 </div>
             </div>
         </div>
@@ -167,7 +175,7 @@
                 </tr>
             </thead>
             <tbody id="print-tabla-body" class="divide-y divide-gray-300">
-                <!-- Registros filtrados -->
+                <!-- Registros -->
             </tbody>
         </table>
 
@@ -193,7 +201,6 @@
 
         let movimientos = JSON.parse(localStorage.getItem('jaime_sales_cloud_v3')) || [];
 
-        // Auto-calcular monto total en ventas cuando cambian cantidad o precio unitario
         const cantInput = document.getElementById('cantidad');
         const precioInput = document.getElementById('precio-unitario');
         const montoInput = document.getElementById('monto-total');
@@ -212,7 +219,6 @@
         cantInput.addEventListener('input', calcularMontoVenta);
         precioInput.addEventListener('input', calcularMontoVenta);
 
-        // Cambiar la vista del formulario según el tipo seleccionado
         function cambiarTipoFormulario() {
             const tipo = document.querySelector('input[name="tipo"]:checked').value;
             const campoVenta = document.getElementById('campo-venta-cant');
@@ -232,7 +238,6 @@
             }
         }
 
-        // Guardar Movimiento
         document.getElementById('movimiento-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -243,7 +248,7 @@
 
             const nuevoMovimiento = {
                 id: Date.now(),
-                tipo: tipo, // 'INGRESO' o 'INVERSION'
+                tipo: tipo,
                 fecha: fecha,
                 concepto: concepto,
                 monto: monto
@@ -252,7 +257,6 @@
             movimientos.push(nuevoMovimiento);
             guardarYActualizar();
             
-            // Limpiar
             document.getElementById('concepto').value = '';
             document.getElementById('precio-unitario').value = '';
             document.getElementById('monto-total').value = '';
@@ -271,6 +275,40 @@
                 movimientos = [];
                 guardarYActualizar();
             }
+        }
+
+        // FUNCIONES DE EXPORTAR E IMPORTAR COPIA DE SEGURIDAD
+        function exportarDatos() {
+            if(movimientos.length === 0) {
+                alert("No hay datos para exportar.");
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(movimientos, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `respaldo_ventas_jaime_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importarDatos(event) {
+            const fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                try {
+                    const datosImportados = JSON.parse(e.target.result);
+                    if(Array.isArray(datosImportados)) {
+                        movimientos = datosImportados;
+                        guardarYActualizar();
+                        alert("¡Datos cargados con éxito!");
+                    } else {
+                        alert("El archivo no tiene el formato correcto.");
+                    }
+                } catch(err) {
+                    alert("Error al leer el archivo.");
+                }
+            };
+            fileReader.readAsText(event.target.files[0]);
         }
 
         function guardarYActualizar() {
@@ -371,7 +409,6 @@
             printArea.classList.add('hidden');
         }
 
-        // Inicializar
         cambiarTipoFormulario();
         actualizarUI();
     </script>
