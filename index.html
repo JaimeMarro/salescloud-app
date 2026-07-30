@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SalesCloud App - Jaime v3.1</title>
+    <title>SalesCloud App - Jaime v3.2</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -39,19 +39,23 @@
             <i class="fa-solid fa-sack-dollar text-6xl text-blue-100"></i>
         </div>
 
-        <!-- KPIs -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <!-- KPIs (4 Tarjetas incluyendo ROI) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <p class="text-sm text-gray-500 font-semibold"><i class="fa-solid fa-arrow-down text-green-500"></i> Ingresos Totales (Ventas)</p>
-                <p class="text-2xl font-bold text-green-600" id="kpi-ingresos">$0.00</p>
+                <p class="text-xs text-gray-500 font-semibold"><i class="fa-solid fa-arrow-down text-green-500"></i> Ingresos Totales (Ventas)</p>
+                <p class="text-xl font-bold text-green-600 mt-1" id="kpi-ingresos">$0.00</p>
             </div>
             <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <p class="text-sm text-gray-500 font-semibold"><i class="fa-solid fa-arrow-up text-red-500"></i> Inversión y Gastos Totales</p>
-                <p class="text-2xl font-bold text-red-600" id="kpi-inversion">$0.00</p>
+                <p class="text-xs text-gray-500 font-semibold"><i class="fa-solid fa-arrow-up text-red-500"></i> Inversión y Gastos Totales</p>
+                <p class="text-xl font-bold text-red-600 mt-1" id="kpi-inversion">$0.00</p>
             </div>
             <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <p class="text-sm text-gray-500 font-semibold"><i class="fa-solid fa-trophy text-blue-600"></i> Utilidad Neta (Ganancia Real)</p>
-                <p class="text-2xl font-bold text-blue-600" id="kpi-utilidad">$0.00</p>
+                <p class="text-xs text-gray-500 font-semibold"><i class="fa-solid fa-trophy text-blue-600"></i> Utilidad Neta (Ganancia)</p>
+                <p class="text-xl font-bold text-blue-600 mt-1" id="kpi-utilidad">$0.00</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                <p class="text-xs text-gray-500 font-semibold"><i class="fa-solid fa-chart-line text-purple-600"></i> Retorno Inversión (ROI)</p>
+                <p class="text-xl font-bold text-purple-600 mt-1" id="kpi-roi">0.00%</p>
             </div>
         </div>
 
@@ -157,6 +161,7 @@
                 <p>Ingresos Totales (Ventas): <span id="print-ingresos" class="font-bold text-green-700"></span></p>
                 <p>Inversiones y Gastos: <span id="print-inversion" class="font-bold text-red-700"></span></p>
                 <p class="text-xl mt-2 border-t border-black pt-2">UTILIDAD NETA: <span id="print-utilidad" class="font-bold"></span></p>
+                <p>Rendimiento (ROI): <span id="print-roi" class="font-bold text-purple-700"></span></p>
                 <p class="text-sm text-gray-600">Dinero Final en Caja: <span id="print-caja" class="font-bold"></span></p>
             </div>
             <div class="w-1/2 border-2 border-dashed border-gray-400 p-4 text-center flex flex-col justify-center items-center h-40">
@@ -277,7 +282,6 @@
             }
         }
 
-        // FUNCIONES DE EXPORTAR E IMPORTAR COPIA DE SEGURIDAD
         function exportarDatos() {
             if(movimientos.length === 0) {
                 alert("No hay datos para exportar.");
@@ -353,12 +357,22 @@
             const utilidadNeta = tIngresos - tInversion;
             const dineroCaja = CAPITAL_INICIAL + utilidadNeta;
 
+            // CÁLCULO DEL ROI (%)
+            let roi = 0;
+            if (tInversion > 0) {
+                roi = (utilidadNeta / tInversion) * 100;
+            }
+
             document.getElementById('kpi-caja').innerText = formatearMoneda(dineroCaja);
             document.getElementById('kpi-ingresos').innerText = formatearMoneda(tIngresos);
             document.getElementById('kpi-inversion').innerText = formatearMoneda(tInversion);
             document.getElementById('kpi-utilidad').innerText = formatearMoneda(utilidadNeta);
+            document.getElementById('kpi-utilidad').className = `text-xl font-bold ${utilidadNeta >= 0 ? 'text-blue-600' : 'text-red-600'}`;
 
-            document.getElementById('kpi-utilidad').className = `text-2xl font-bold ${utilidadNeta >= 0 ? 'text-blue-600' : 'text-red-600'}`;
+            // Actualizar tarjeta ROI
+            const kpiRoi = document.getElementById('kpi-roi');
+            kpiRoi.innerText = `${roi >= 0 ? '+' : ''}${roi.toFixed(2)}%`;
+            kpiRoi.className = `text-xl font-bold ${roi >= 0 ? 'text-purple-600' : 'text-red-600'}`;
         }
 
         function prepararReporte() {
@@ -394,6 +408,7 @@
             });
 
             const dUtilidad = dIngresos - dInversion;
+            const dRoi = dInversion > 0 ? ((dUtilidad / dInversion) * 100) : 0;
             const dCaja = CAPITAL_INICIAL + (movimientos.filter(m => m.fecha <= fechaReporte).reduce((acc, m) => m.tipo === 'INGRESO' ? acc + m.monto : acc - m.monto, 0));
 
             document.getElementById('print-fecha').innerText = fechaReporte;
@@ -401,6 +416,7 @@
             document.getElementById('print-inversion').innerText = formatearMoneda(dInversion);
             document.getElementById('print-utilidad').innerText = formatearMoneda(dUtilidad);
             document.getElementById('print-utilidad').className = `font-bold text-lg ${dUtilidad >= 0 ? 'text-green-700' : 'text-red-700'}`;
+            document.getElementById('print-roi').innerText = `${dRoi >= 0 ? '+' : ''}${dRoi.toFixed(2)}%`;
             document.getElementById('print-caja').innerText = formatearMoneda(dCaja);
 
             const printArea = document.getElementById('print-area');
