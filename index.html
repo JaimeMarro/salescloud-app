@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SalesCloud App - Jaime v7.0</title>
+    <title>SalesCloud App - Jaime v8.0 Responsive</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -13,6 +13,7 @@
     <style>
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: #f1f5f9;
@@ -23,7 +24,7 @@
             border-radius: 4px;
         }
         
-        /* ESTILOS DE MODO OSCURO TOTAL AL ABRIR FINANZAS */
+        /* ESTILOS MODO OSCURO PARA FINANZAS */
         body.dark-mode {
             background-color: #0f172a !important; /* bg-slate-900 */
             color: #f8fafc !important;
@@ -73,161 +74,174 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-16 transition-colors duration-300">
 
-    <!-- NAV CON PESTAÑAS PRINCIPALES -->
-    <nav class="bg-blue-900 text-white p-4 shadow-md no-print sticky top-0 z-50 transition-colors duration-300">
-        <div class="container mx-auto flex flex-wrap justify-between items-center gap-4">
-            <h1 class="text-xl font-bold flex items-center gap-2">
-                <i class="fa-solid fa-cloud-bolt text-blue-300"></i> SalesCloud App - Jaime
-            </h1>
+    <!-- NAV CON PESTAÑAS PRINCIPALES (RESPONSIVE) -->
+    <nav class="bg-blue-900 text-white p-3 md:p-4 shadow-md no-print sticky top-0 z-50 transition-colors duration-300">
+        <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            
+            <div class="flex justify-between items-center w-full sm:w-auto">
+                <h1 class="text-lg md:text-xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-bolt text-blue-300"></i> SalesCloud
+                </h1>
+
+                <!-- Base Capital Movil solo visible en pantallas muy pequeñas -->
+                <div class="sm:hidden flex items-center gap-1.5 bg-blue-950 px-2.5 py-1 rounded-full text-xs border border-blue-700">
+                    <span class="text-[11px] font-semibold text-gray-300">Base: <span id="nav-capital-text-mobile" class="font-bold text-yellow-300">$2.00</span></span>
+                    <button onclick="editarCapitalInicial()" class="text-blue-200 hover:text-white text-xs pl-1 border-l border-blue-700">
+                        <i class="fa-solid fa-pen text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
             
             <!-- Botones Principales -->
-            <div class="flex gap-1 bg-blue-950 p-1 rounded-lg text-xs md:text-sm">
-                <button id="tab-ventas-btn" onclick="cambiarPestana('ventas')" class="px-4 py-1.5 rounded-md font-bold bg-blue-600 text-white shadow">
+            <div class="flex w-full sm:w-auto gap-1 bg-blue-950 p-1 rounded-lg text-xs md:text-sm">
+                <button id="tab-ventas-btn" onclick="cambiarPestana('ventas')" class="flex-1 sm:flex-none text-center px-3 md:px-4 py-2 rounded-md font-bold bg-blue-600 text-white shadow">
                     <i class="fa-solid fa-cash-register"></i> Ventas y Caja
                 </button>
-                <button id="tab-inventario-btn" onclick="cambiarPestana('inventario')" class="px-4 py-1.5 rounded-md font-bold text-blue-200 hover:text-white">
+                <button id="tab-inventario-btn" onclick="cambiarPestana('inventario')" class="flex-1 sm:flex-none text-center px-3 md:px-4 py-2 rounded-md font-bold text-blue-200 hover:text-white">
                     <i class="fa-solid fa-boxes-stacked"></i> Inventario
                 </button>
             </div>
 
-            <!-- Capital Inicial Badge Editable -->
-            <div class="flex items-center gap-2 bg-blue-800 px-3 py-1.5 rounded-full border border-blue-700">
-                <span class="text-xs font-semibold">Base: <span id="nav-capital-text" class="font-bold text-yellow-300">$2.00</span></span>
-                <button onclick="editarCapitalInicial()" class="text-blue-200 hover:text-white text-xs pl-1 border-l border-blue-600" title="Editar Capital Inicial">
+            <!-- Capital Inicial Desktop -->
+            <div class="hidden sm:flex items-center gap-2 bg-blue-800 px-3 py-1.5 rounded-full border border-blue-700 text-xs">
+                <span class="font-semibold">Base: <span id="nav-capital-text" class="font-bold text-yellow-300">$2.00</span></span>
+                <button onclick="editarCapitalInicial()" class="text-blue-200 hover:text-white pl-1 border-l border-blue-600" title="Editar Capital Inicial">
                     <i class="fa-solid fa-pen"></i>
                 </button>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4 md:p-6 no-print space-y-6">
+    <div class="container mx-auto p-3 sm:p-4 md:p-6 no-print space-y-4 sm:space-y-6">
         
         <!-- VISTA 1: VENTAS Y CAJA -->
-        <div id="vista-ventas" class="space-y-6">
+        <div id="vista-ventas" class="space-y-4 sm:space-y-6">
             
             <!-- TARJETA DINERO EN CAJA -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 border-blue-600 flex items-center justify-between">
+            <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border-l-8 border-blue-600 flex items-center justify-between">
                 <div>
                     <div class="flex items-center gap-2">
-                        <p class="text-xs uppercase text-gray-500 font-semibold">Dinero Total Acumulado (Tu Caja)</p>
+                        <p class="text-[10px] sm:text-xs uppercase text-gray-500 font-bold">Dinero Total Acumulado (Tu Caja)</p>
                         <button onclick="editarCapitalInicial()" class="text-xs text-blue-600 hover:underline font-bold"><i class="fa-solid fa-pen-to-square"></i> Editar Base</button>
                     </div>
-                    <p class="text-4xl font-extrabold text-blue-900" id="kpi-caja">$2.00</p>
-                    <p class="text-xs text-gray-400 mt-1">Capital Inicial (<span id="caja-base-subtext">$2.00</span>) + Ingresos - Inversiones/Gastos</p>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-blue-900 mt-1" id="kpi-caja">$2.00</p>
+                    <p class="text-[11px] sm:text-xs text-gray-400 mt-1">Base (<span id="caja-base-subtext">$2.00</span>) + Ingresos - Gastos</p>
                 </div>
-                <i class="fa-solid fa-sack-dollar text-6xl text-blue-100"></i>
+                <i class="fa-solid fa-sack-dollar text-4xl sm:text-6xl text-blue-100"></i>
             </div>
 
-            <!-- KPIs -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-xs text-gray-500 font-semibold"><i class="fa-solid fa-arrow-down text-green-500"></i> Ingresos Totales (Ventas)</p>
-                    <p class="text-xl font-bold text-green-600 mt-1" id="kpi-ingresos">$0.00</p>
+            <!-- KPIs RESPONSIVE GRID -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100">
+                    <p class="text-[11px] sm:text-xs text-gray-500 font-semibold truncate"><i class="fa-solid fa-arrow-down text-green-500"></i> Ingresos Totales</p>
+                    <p class="text-base sm:text-xl font-bold text-green-600 mt-1" id="kpi-ingresos">$0.00</p>
                 </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-xs text-gray-500 font-semibold"><i class="fa-solid fa-arrow-up text-red-500"></i> Inversión y Gastos Totales</p>
-                    <p class="text-xl font-bold text-red-600 mt-1" id="kpi-inversion">$0.00</p>
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100">
+                    <p class="text-[11px] sm:text-xs text-gray-500 font-semibold truncate"><i class="fa-solid fa-arrow-up text-red-500"></i> Gastos e Inversión</p>
+                    <p class="text-base sm:text-xl font-bold text-red-600 mt-1" id="kpi-inversion">$0.00</p>
                 </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-xs text-gray-500 font-semibold"><i class="fa-solid fa-trophy text-blue-600"></i> Utilidad Neta (Ganancia)</p>
-                    <p class="text-xl font-bold text-blue-600 mt-1" id="kpi-utilidad">$0.00</p>
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100">
+                    <p class="text-[11px] sm:text-xs text-gray-500 font-semibold truncate"><i class="fa-solid fa-trophy text-blue-600"></i> Utilidad Neta</p>
+                    <p class="text-base sm:text-xl font-bold text-blue-600 mt-1" id="kpi-utilidad">$0.00</p>
                 </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <p class="text-xs text-gray-500 font-semibold"><i class="fa-solid fa-chart-line text-purple-600"></i> Retorno Inversión (ROI)</p>
-                    <p class="text-xl font-bold text-purple-600 mt-1" id="kpi-roi">0.00%</p>
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100">
+                    <p class="text-[11px] sm:text-xs text-gray-500 font-semibold truncate"><i class="fa-solid fa-chart-line text-purple-600"></i> Retorno (ROI)</p>
+                    <p class="text-base sm:text-xl font-bold text-purple-600 mt-1" id="kpi-roi">0.00%</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 <!-- FORMULARIO DE MOVIMIENTO -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-1 h-fit">
-                    <h2 class="text-lg font-bold mb-4 border-b pb-2"><i class="fa-solid fa-pen-to-square text-blue-600"></i> Registrar Movimiento</h2>
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-1 h-fit">
+                    <h2 class="text-base sm:text-lg font-bold mb-4 border-b pb-2 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-blue-600"></i> Registrar Movimiento</h2>
                     
                     <form id="movimiento-form" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Tipo de Movimiento</label>
                             <div class="grid grid-cols-2 gap-2">
-                                <label class="flex items-center justify-center p-2 border rounded-lg cursor-pointer border-gray-300 has-[:checked]:border-green-600 has-[:checked]:bg-green-50">
+                                <label class="flex items-center justify-center p-2.5 border rounded-lg cursor-pointer border-gray-300 has-[:checked]:border-green-600 has-[:checked]:bg-green-50 text-center">
                                     <input type="radio" name="tipo" value="INGRESO" class="hidden" checked onchange="cambiarTipoFormulario()">
-                                    <span class="text-sm font-bold text-green-700"><i class="fa-solid fa-circle-plus"></i> Ingreso (Venta)</span>
+                                    <span class="text-xs sm:text-sm font-bold text-green-700"><i class="fa-solid fa-circle-plus"></i> Ingreso</span>
                                 </label>
-                                <label class="flex items-center justify-center p-2 border rounded-lg cursor-pointer border-gray-300 has-[:checked]:border-red-600 has-[:checked]:bg-red-50">
+                                <label class="flex items-center justify-center p-2.5 border rounded-lg cursor-pointer border-gray-300 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 text-center">
                                     <input type="radio" name="tipo" value="INVERSION" class="hidden" onchange="cambiarTipoFormulario()">
-                                    <span class="text-sm font-bold text-red-700"><i class="fa-solid fa-circle-minus"></i> Inversión / Gasto</span>
+                                    <span class="text-xs sm:text-sm font-bold text-red-700"><i class="fa-solid fa-circle-minus"></i> Gasto</span>
                                 </label>
                             </div>
                         </div>
 
-                        <input type="date" id="fecha" class="w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm" required>
+                        <input type="date" id="fecha" class="w-full rounded-lg border-gray-300 shadow-sm border p-2.5 text-xs sm:text-sm" required>
                         
-                        <!-- SELECCIÓN DE PRODUCTO (SOLO PARA VENTAS) -->
+                        <!-- SELECCIÓN DE PRODUCTO -->
                         <div id="seccion-producto-select">
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">Seleccionar Producto del Inventario</label>
-                            <select id="producto-select" class="w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm font-medium" onchange="alSeleccionarProducto()">
-                                <option value="">-- Selecciona un producto --</option>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Producto del Inventario</label>
+                            <select id="producto-select" class="w-full rounded-lg border-gray-300 shadow-sm border p-2.5 text-xs sm:text-sm font-medium" onchange="alSeleccionarProducto()">
+                                <option value="">-- Selecciona producto --</option>
                             </select>
                         </div>
 
-                        <!-- CONCEPTO PARA INVERSIÓN/GASTO LIBRE -->
+                        <!-- CONCEPTO LIBRE -->
                         <div id="seccion-concepto-libre" class="hidden">
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">Concepto del Gasto / Inversión</label>
-                            <input type="text" id="concepto" placeholder="Ej. Compra de empaques, papelería..." class="w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Concepto del Gasto</label>
+                            <input type="text" id="concepto" placeholder="Ej. Compra de empaques..." class="w-full rounded-lg border-gray-300 shadow-sm border p-2.5 text-xs sm:text-sm">
                         </div>
 
-                        <div id="campo-venta-cant" class="grid grid-cols-2 gap-4">
+                        <div id="campo-venta-cant" class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs text-gray-500 mb-1">Cantidad vendida</label>
+                                <label class="block text-xs text-gray-500 mb-1">Cantidad</label>
                                 <div class="flex items-center">
-                                    <button type="button" onclick="modificarCantidad(-1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-3 py-2 rounded-l-md border border-r-0 border-gray-300 text-sm">-</button>
-                                    <input type="number" id="cantidad" min="1" value="1" class="w-full text-center border-y border-gray-300 py-2 text-sm font-bold focus:outline-none" oninput="calcularMontoVenta()">
-                                    <button type="button" onclick="modificarCantidad(1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-3 py-2 rounded-r-md border border-l-0 border-gray-300 text-sm">+</button>
+                                    <button type="button" onclick="modificarCantidad(-1)" class="bg-gray-200 hover:bg-gray-300 active:bg-gray-400 text-gray-700 font-bold px-3 py-2.5 rounded-l-lg border border-r-0 border-gray-300 text-sm">-</button>
+                                    <input type="number" id="cantidad" min="1" value="1" class="w-full text-center border-y border-gray-300 py-2.5 text-sm font-bold focus:outline-none" oninput="calcularMontoVenta()">
+                                    <button type="button" onclick="modificarCantidad(1)" class="bg-gray-200 hover:bg-gray-300 active:bg-gray-400 text-gray-700 font-bold px-3 py-2.5 rounded-r-lg border border-l-0 border-gray-300 text-sm">+</button>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs text-gray-500 mb-1">Precio Unitario ($)</label>
-                                <input type="number" id="precio-unitario" step="0.01" min="0" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm bg-gray-50" readonly>
+                                <label class="block text-xs text-gray-500 mb-1">Precio Unit. ($)</label>
+                                <input type="number" id="precio-unitario" step="0.01" min="0" placeholder="0.00" class="w-full rounded-lg border-gray-300 shadow-sm border p-2.5 text-xs sm:text-sm bg-gray-50" readonly>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs text-gray-500 font-semibold" id="label-monto">Monto Total ($)</label>
-                            <input type="number" id="monto-total" step="0.01" min="0.01" placeholder="0.00" class="w-full rounded-md border-gray-300 shadow-sm border p-2 font-bold text-lg" required>
+                            <label class="block text-xs text-gray-500 font-semibold mb-1" id="label-monto">Monto Total ($)</label>
+                            <input type="number" id="monto-total" step="0.01" min="0.01" placeholder="0.00" class="w-full rounded-lg border-gray-300 shadow-sm border p-2.5 font-bold text-base sm:text-lg" required>
                         </div>
 
                         <!-- ALERTA DE STOCK INSUFICIENTE -->
-                        <div id="alerta-stock" class="hidden bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded-md text-xs font-bold flex items-center gap-2">
+                        <div id="alerta-stock" class="hidden bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2">
                             <i class="fa-solid fa-triangle-exclamation text-base"></i>
-                            <span id="alerta-stock-texto">¡Stock insuficiente para esta venta!</span>
+                            <span id="alerta-stock-texto">¡Stock insuficiente!</span>
                         </div>
 
-                        <button type="submit" id="btn-guardar" class="w-full bg-green-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-green-700 transition shadow-sm">
+                        <button type="submit" id="btn-guardar" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-green-700 active:bg-green-800 transition shadow-sm text-sm">
                             Guardar Ingreso (Venta)
                         </button>
                     </form>
                 </div>
 
-                <!-- TABLA DE HISTORIAL CON SCROLL INTERNO -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2 flex flex-col justify-between">
+                <!-- TABLA DE HISTORIAL RESPONSIVE -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2 flex flex-col justify-between">
                     <div>
-                        <div class="flex flex-wrap justify-between items-center gap-2 mb-4 border-b pb-2">
-                            <h2 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-list-check text-blue-600"></i> Historial</h2>
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-4 border-b pb-3">
+                            <h2 class="text-base sm:text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-list-check text-blue-600"></i> Historial</h2>
                             
-                            <div class="flex items-center gap-2">
-                                <label class="text-xs font-semibold text-gray-500">Filtrar:</label>
-                                <select id="filtro-tipo-mov" onchange="actualizarUI()" class="text-xs border rounded-md px-2 py-1 bg-gray-50 font-bold">
-                                    <option value="TODOS">Todos</option>
-                                    <option value="INGRESO">Ingresos</option>
-                                    <option value="INVERSION">Inversión / Gastos</option>
-                                </select>
-                                <button onclick="prepararReporte()" class="bg-slate-800 text-white text-xs px-3 py-1.5 rounded-md hover:bg-slate-700 flex items-center gap-1 font-semibold ml-2">
+                            <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+                                <div class="flex items-center gap-1.5">
+                                    <label class="text-xs font-semibold text-gray-500">Filtrar:</label>
+                                    <select id="filtro-tipo-mov" onchange="actualizarUI()" class="text-xs border rounded-lg px-2 py-1.5 bg-gray-50 font-bold">
+                                        <option value="TODOS">Todos</option>
+                                        <option value="INGRESO">Ingresos</option>
+                                        <option value="INVERSION">Gastos</option>
+                                    </select>
+                                </div>
+                                <button onclick="prepararReporte()" class="bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-slate-700 flex items-center gap-1 font-semibold">
                                     <i class="fa-solid fa-print"></i> Reporte
                                 </button>
                             </div>
                         </div>
 
-                        <div class="overflow-y-auto max-h-[500px] custom-scrollbar border rounded-lg">
-                            <table class="min-w-full text-xs text-left text-gray-500 relative">
+                        <div class="overflow-x-auto custom-scrollbar border rounded-xl max-h-[450px]">
+                            <table class="min-w-full text-xs text-left text-gray-500 whitespace-nowrap">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0 border-b z-10 shadow-sm">
                                     <tr>
                                         <th class="px-3 py-2.5 bg-gray-50">Fecha</th>
@@ -244,83 +258,83 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 pt-3 border-t flex flex-wrap justify-between items-center gap-2">
-                        <div class="flex gap-2">
-                            <button onclick="exportarDatos()" class="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1">
-                                <i class="fa-solid fa-download"></i> Exportar Respaldo
+                    <div class="mt-6 pt-3 border-t flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <button onclick="exportarDatos()" class="flex-1 sm:flex-none text-center bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs px-3 py-2 rounded-lg font-semibold flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-download"></i> Exportar
                             </button>
-                            <button onclick="document.getElementById('import-file').click()" class="bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200 text-xs px-3 py-1.5 rounded-md font-semibold flex items-center gap-1">
-                                <i class="fa-solid fa-upload"></i> Importar Respaldo
+                            <button onclick="document.getElementById('import-file').click()" class="flex-1 sm:flex-none text-center bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200 text-xs px-3 py-2 rounded-lg font-semibold flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-upload"></i> Importar
                             </button>
                             <input type="file" id="import-file" class="hidden" accept=".json" onchange="importarDatos(event)">
                         </div>
-                        <button onclick="limpiarDatos()" class="text-xs text-red-500 hover:underline font-semibold"><i class="fa-solid fa-trash-can"></i> Reiniciar Todo</button>
+                        <button onclick="limpiarDatos()" class="text-xs text-red-500 hover:underline font-semibold w-full sm:w-auto text-center"><i class="fa-solid fa-trash-can"></i> Reiniciar Todo</button>
                     </div>
                 </div>
             </div>
 
             <!-- ======================================================== -->
-            <!-- ACCORDEONES PERTENECIENTES SOLO A VENTAS Y CAJA          -->
+            <!-- ACCORDEONES CON RESPONSIVE OPTIMIZADO                    -->
             <!-- ======================================================== -->
 
             <!-- MÓDULO FINANZAS (REGLAS DE DISTRIBUCIÓN & METAS) CON MODO OSCURO -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden transition-all">
-                <button onclick="toggleDesplegable('desplegable-distribucion')" class="w-full bg-white text-slate-800 px-6 py-4 flex justify-between items-center hover:bg-slate-50 transition border-b border-transparent">
-                    <span class="font-bold text-base md:text-lg flex items-center gap-3">
-                        <span class="p-2 bg-purple-100 text-purple-700 rounded-lg"><i class="fa-solid fa-wallet"></i></span>
-                        Finanzas (Reglas de Distribución & Metas)
+                <button onclick="toggleDesplegable('desplegable-distribucion')" class="w-full bg-white text-slate-800 p-4 sm:p-5 flex justify-between items-center hover:bg-slate-50 transition border-b border-transparent">
+                    <span class="font-bold text-sm sm:text-base md:text-lg flex items-center gap-2 sm:gap-3">
+                        <span class="p-1.5 sm:p-2 bg-purple-100 text-purple-700 rounded-lg text-sm sm:text-base"><i class="fa-solid fa-wallet"></i></span>
+                        Finanzas (Distribución & Metas)
                     </span>
                     <div class="flex items-center gap-2">
-                        <span class="text-[11px] bg-purple-900 text-purple-200 px-2 py-0.5 rounded-full font-bold">🌙 Activa Modo Oscuro</span>
-                        <i id="icon-desplegable-distribucion" class="fa-solid fa-chevron-down text-gray-400 text-lg transition-transform"></i>
+                        <span class="hidden sm:inline text-[10px] bg-purple-900 text-purple-200 px-2 py-0.5 rounded-full font-bold">🌙 Modo Oscuro</span>
+                        <i id="icon-desplegable-distribucion" class="fa-solid fa-chevron-down text-gray-400 text-base sm:text-lg transition-transform"></i>
                     </div>
                 </button>
 
-                <div id="desplegable-distribucion" class="hidden p-6 space-y-6 bg-slate-50 border-t border-gray-100">
+                <div id="desplegable-distribucion" class="hidden p-3 sm:p-6 space-y-4 sm:space-y-6 bg-slate-50 border-t border-gray-100">
                     
-                    <!-- PESTAÑAS INTERNAS DE FINANZAS -->
-                    <div class="flex border-b border-slate-700 gap-4 text-sm font-bold pb-2">
-                        <button id="subtab-reglas-btn" onclick="cambiarSubpestanaFinanzas('reglas')" class="text-purple-400 border-b-2 border-purple-500 pb-1 flex items-center gap-2">
+                    <!-- PESTAÑAS INTERNAS SCROLLABLE EN MÓVIL -->
+                    <div class="flex border-b border-slate-700 gap-3 sm:gap-4 text-xs sm:text-sm font-bold pb-2 overflow-x-auto custom-scrollbar whitespace-nowrap">
+                        <button id="subtab-reglas-btn" onclick="cambiarSubpestanaFinanzas('reglas')" class="text-purple-400 border-b-2 border-purple-500 pb-1 flex items-center gap-1.5">
                             <i class="fa-solid fa-scale-balanced"></i> Reglas de Distribución
                         </button>
-                        <button id="subtab-metas-btn" onclick="cambiarSubpestanaFinanzas('metas')" class="text-gray-400 hover:text-purple-300 pb-1 flex items-center gap-2">
+                        <button id="subtab-metas-btn" onclick="cambiarSubpestanaFinanzas('metas')" class="text-gray-400 hover:text-purple-300 pb-1 flex items-center gap-1.5">
                             <i class="fa-solid fa-bullseye"></i> Metas de Ahorro / Compras
                         </button>
                     </div>
 
                     <!-- SUB-PESTAÑA 1: REGLAS DE DISTRIBUCIÓN -->
-                    <div id="subvista-reglas" class="space-y-6">
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div id="subvista-reglas" class="space-y-4 sm:space-y-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                             
                             <!-- Formulario para agregar Regla -->
                             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm lg:col-span-1">
-                                <h3 class="font-bold text-sm border-b pb-2 mb-4 flex items-center gap-2">
-                                    <i class="fa-solid fa-plus-circle text-purple-500"></i> Nueva Regla de Distribución
+                                <h3 class="font-bold text-xs sm:text-sm border-b pb-2 mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-plus-circle text-purple-500"></i> Nueva Regla
                                 </h3>
                                 <form id="regla-form" class="space-y-3">
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1">Nombre de la Regla</label>
-                                        <input type="text" id="regla-nombre" placeholder="Ej. Diezmo, Ahorro, Emergencia" class="w-full rounded-md border p-2 text-sm" required>
+                                        <label class="block text-[11px] font-semibold mb-1">Nombre de la Regla</label>
+                                        <input type="text" id="regla-nombre" placeholder="Ej. Diezmo, Ahorro" class="w-full rounded-lg border p-2 text-xs sm:text-sm" required>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1">Tipo de Deducción</label>
-                                        <select id="regla-tipo" class="w-full rounded-md border p-2 text-sm font-semibold" onchange="cambiarTipoReglaLabel()">
+                                        <label class="block text-[11px] font-semibold mb-1">Tipo de Deducción</label>
+                                        <select id="regla-tipo" class="w-full rounded-lg border p-2 text-xs sm:text-sm font-semibold" onchange="cambiarTipoReglaLabel()">
                                             <option value="PORCENTAJE">Porcentaje (%) sobre Ganancia</option>
                                             <option value="FIJO">Monto Fijo ($)</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1" id="regla-valor-label">Porcentaje (%)</label>
-                                        <input type="number" id="regla-valor" step="0.01" min="0.01" placeholder="Ej. 10" class="w-full rounded-md border p-2 text-sm" required>
+                                        <label class="block text-[11px] font-semibold mb-1" id="regla-valor-label">Porcentaje (%)</label>
+                                        <input type="number" id="regla-valor" step="0.01" min="0.01" placeholder="Ej. 10" class="w-full rounded-lg border p-2 text-xs sm:text-sm" required>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1">Frecuencia</label>
-                                        <select id="regla-frecuencia" class="w-full rounded-md border p-2 text-sm">
+                                        <label class="block text-[11px] font-semibold mb-1">Frecuencia</label>
+                                        <select id="regla-frecuencia" class="w-full rounded-lg border p-2 text-xs sm:text-sm">
                                             <option value="Mensual">Mensual</option>
                                             <option value="Semanal">Semanal</option>
                                         </select>
                                     </div>
-                                    <button type="submit" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition shadow-sm text-sm">
+                                    <button type="submit" class="w-full bg-purple-600 text-white font-bold py-2.5 px-4 rounded-xl hover:bg-purple-700 transition shadow-sm text-xs sm:text-sm">
                                         <i class="fa-solid fa-floppy-disk"></i> Guardar Regla
                                     </button>
                                 </form>
@@ -329,11 +343,11 @@
                             <!-- Lista de Reglas Configuradas -->
                             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm lg:col-span-2 flex flex-col justify-between">
                                 <div>
-                                    <h3 class="font-bold text-sm border-b pb-2 mb-4 flex items-center gap-2">
+                                    <h3 class="font-bold text-xs sm:text-sm border-b pb-2 mb-3 flex items-center gap-2">
                                         <i class="fa-solid fa-sliders text-purple-500"></i> Reglas Activas
                                     </h3>
-                                    <div class="overflow-x-auto">
-                                        <table class="min-w-full text-xs text-left">
+                                    <div class="overflow-x-auto custom-scrollbar">
+                                        <table class="min-w-full text-xs text-left whitespace-nowrap">
                                             <thead class="text-xs uppercase bg-gray-50 border-b">
                                                 <tr>
                                                     <th class="px-3 py-2 font-bold">Nombre</th>
@@ -353,40 +367,40 @@
                         </div>
 
                         <!-- DESGLOSE TIPO CALENDARIO / MES A MES -->
-                        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
-                            <div class="flex justify-between items-center border-b pb-2">
-                                <h3 class="font-bold text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-calendar-days text-purple-500"></i> Historial / Calendario de Distribución por Mes
+                        <div class="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 shadow-sm space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 border-b pb-2">
+                                <h3 class="font-bold text-xs sm:text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-calendar-days text-purple-500"></i> Desglose Mensual
                                 </h3>
-                                <span class="text-xs bg-purple-950 text-purple-300 px-2 py-1 rounded font-semibold">Cálculo basado en Ganancia Neta</span>
+                                <span class="text-[10px] sm:text-xs bg-purple-950 text-purple-300 px-2 py-0.5 rounded font-semibold w-fit">Calculado según Ganancia Neta</span>
                             </div>
                             
-                            <div id="contenedor-calendario-distribucion" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div id="contenedor-calendario-distribucion" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                                 <!-- Tarjetas mensuales dinámicas -->
                             </div>
                         </div>
                     </div>
 
                     <!-- SUB-PESTAÑA 2: METAS FINANCIERAS -->
-                    <div id="subvista-metas" class="hidden space-y-6">
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div id="subvista-metas" class="hidden space-y-4 sm:space-y-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                             
                             <!-- Formulario Nueva Meta -->
                             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm lg:col-span-1">
-                                <h3 class="font-bold text-sm border-b pb-2 mb-4 flex items-center gap-2">
-                                    <i class="fa-solid fa-plus-circle text-purple-500"></i> Crear Nueva Meta
+                                <h3 class="font-bold text-xs sm:text-sm border-b pb-2 mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-plus-circle text-purple-500"></i> Nueva Meta
                                 </h3>
                                 <form id="meta-form" class="space-y-3">
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1">Nombre de la Meta</label>
-                                        <input type="text" id="meta-nombre" placeholder="Ej. Comprar Impresora, Laptop, Fondo de Reserva" class="w-full rounded-md border p-2 text-sm" required>
+                                        <label class="block text-[11px] font-semibold mb-1">Nombre de la Meta</label>
+                                        <input type="text" id="meta-nombre" placeholder="Ej. Impresora, Laptop" class="w-full rounded-lg border p-2 text-xs sm:text-sm" required>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold mb-1">Monto Objetivo ($)</label>
-                                        <input type="number" id="meta-monto-objetivo" step="0.01" min="0.01" placeholder="Ej. 150.00" class="w-full rounded-md border p-2 text-sm" required>
+                                        <label class="block text-[11px] font-semibold mb-1">Monto Objetivo ($)</label>
+                                        <input type="number" id="meta-monto-objetivo" step="0.01" min="0.01" placeholder="Ej. 150.00" class="w-full rounded-lg border p-2 text-xs sm:text-sm" required>
                                     </div>
-                                    <p class="text-[11px] text-gray-400 italic">El inicio automático del monto acumulado será de $0.00.</p>
-                                    <button type="submit" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition shadow-sm text-sm">
+                                    <p class="text-[10px] text-gray-400 italic">Inicia automáticamente con $0.00 ahorrados.</p>
+                                    <button type="submit" class="w-full bg-purple-600 text-white font-bold py-2.5 px-4 rounded-xl hover:bg-purple-700 transition shadow-sm text-xs sm:text-sm">
                                         <i class="fa-solid fa-flag-checkered"></i> Crear Meta
                                     </button>
                                 </form>
@@ -394,11 +408,11 @@
 
                             <!-- Listado de Metas Tarjetas -->
                             <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm lg:col-span-2 space-y-4">
-                                <h3 class="font-bold text-sm border-b pb-2 flex items-center gap-2">
+                                <h3 class="font-bold text-xs sm:text-sm border-b pb-2 flex items-center gap-2">
                                     <i class="fa-solid fa-list-dots text-purple-500"></i> Metas en Progreso y Completadas
                                 </h3>
                                 
-                                <div id="contenedor-metas" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div id="contenedor-metas" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                     <!-- Tarjetas de Metas dinámicas -->
                                 </div>
                             </div>
@@ -411,52 +425,49 @@
 
             <!-- ACCORDEON: INSIGHTS DE PRODUCTOS -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden transition-all">
-                <button onclick="toggleDesplegable('desplegable-insights')" class="w-full bg-white text-slate-800 px-6 py-4 flex justify-between items-center hover:bg-slate-50 transition border-b border-transparent">
-                    <span class="font-bold text-base md:text-lg flex items-center gap-3">
-                        <span class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-chart-pie"></i></span>
-                        Insights de Productos & Rentabilidad
+                <button onclick="toggleDesplegable('desplegable-insights')" class="w-full bg-white text-slate-800 p-4 sm:p-5 flex justify-between items-center hover:bg-slate-50 transition border-b border-transparent">
+                    <span class="font-bold text-sm sm:text-base md:text-lg flex items-center gap-2 sm:gap-3">
+                        <span class="p-1.5 sm:p-2 bg-blue-50 text-blue-600 rounded-lg text-sm sm:text-base"><i class="fa-solid fa-chart-pie"></i></span>
+                        Insights de Rentabilidad
                     </span>
-                    <i id="icon-desplegable-insights" class="fa-solid fa-chevron-down text-gray-400 text-lg transition-transform"></i>
+                    <i id="icon-desplegable-insights" class="fa-solid fa-chevron-down text-gray-400 text-base sm:text-lg transition-transform"></i>
                 </button>
 
-                <div id="desplegable-insights" class="hidden p-6 space-y-6 bg-slate-50 border-t border-gray-100">
+                <div id="desplegable-insights" class="hidden p-3 sm:p-6 space-y-4 sm:space-y-6 bg-slate-50 border-t border-gray-100">
                     
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-white border border-blue-200 p-4 rounded-xl shadow-sm">
-                            <p class="text-xs text-blue-600 font-bold uppercase">Más Vendido (Volumen)</p>
-                            <p id="insight-top-producto" class="text-lg font-extrabold text-blue-900 mt-1">Ninguno aún</p>
-                            <p id="insight-top-cant" class="text-xs text-gray-500">0 unidades vendidas</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                        <div class="bg-white border border-blue-200 p-3 sm:p-4 rounded-xl shadow-sm">
+                            <p class="text-[10px] sm:text-xs text-blue-600 font-bold uppercase truncate">Más Vendido</p>
+                            <p id="insight-top-producto" class="text-sm sm:text-lg font-extrabold text-blue-900 mt-1 truncate">Ninguno</p>
+                            <p id="insight-top-cant" class="text-[10px] sm:text-xs text-gray-500">0 unidades</p>
                         </div>
 
-                        <div class="bg-white border border-amber-300 p-4 rounded-xl shadow-sm relative overflow-hidden">
-                            <div class="absolute top-0 right-0 bg-amber-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-bl">MÁS RENTABLE 💰</div>
-                            <p class="text-xs text-amber-600 font-bold uppercase mt-1">Mayor Ingreso Monetario</p>
-                            <p id="insight-rentable-producto" class="text-lg font-extrabold text-amber-900 mt-1">Ninguno aún</p>
-                            <p id="insight-rentable-monto" class="text-xs text-amber-700 font-bold">$0.00 generado</p>
+                        <div class="bg-white border border-amber-300 p-3 sm:p-4 rounded-xl shadow-sm relative overflow-hidden">
+                            <p class="text-[10px] sm:text-xs text-amber-600 font-bold uppercase truncate">Más Rentable</p>
+                            <p id="insight-rentable-producto" class="text-sm sm:text-lg font-extrabold text-amber-900 mt-1 truncate">Ninguno</p>
+                            <p id="insight-rentable-monto" class="text-[10px] sm:text-xs text-amber-700 font-bold">$0.00</p>
                         </div>
 
-                        <div class="bg-white border border-green-200 p-4 rounded-xl shadow-sm">
-                            <p class="text-xs text-green-600 font-bold uppercase">Total Productos Vendidos</p>
-                            <p id="insight-total-unidades" class="text-2xl font-extrabold text-green-800 mt-1">0 unids.</p>
-                            <p class="text-xs text-gray-500">Volumen total acumulado</p>
+                        <div class="bg-white border border-green-200 p-3 sm:p-4 rounded-xl shadow-sm">
+                            <p class="text-[10px] sm:text-xs text-green-600 font-bold uppercase truncate">Total Vendidos</p>
+                            <p id="insight-total-unidades" class="text-base sm:text-2xl font-extrabold text-green-800 mt-1">0 unids.</p>
                         </div>
 
-                        <div class="bg-white border border-purple-200 p-4 rounded-xl shadow-sm">
-                            <p class="text-xs text-purple-600 font-bold uppercase">Variedad en Ventas</p>
-                            <p id="insight-variedad" class="text-2xl font-extrabold text-purple-800 mt-1">0 ítems</p>
-                            <p class="text-xs text-gray-500">Productos distintos vendidos</p>
+                        <div class="bg-white border border-purple-200 p-3 sm:p-4 rounded-xl shadow-sm">
+                            <p class="text-[10px] sm:text-xs text-purple-600 font-bold uppercase truncate">Variedad</p>
+                            <p id="insight-variedad" class="text-base sm:text-2xl font-extrabold text-purple-800 mt-1">0 ítems</p>
                         </div>
                     </div>
 
-                    <h3 class="font-bold text-sm text-gray-700 border-b pb-2">Tabla Detallada de Rentabilidad por Producto</h3>
-                    <div class="overflow-x-auto bg-white rounded-lg border border-gray-200">
-                        <table class="min-w-full text-xs text-left text-gray-500">
+                    <h3 class="font-bold text-xs sm:text-sm text-gray-700 border-b pb-2">Tabla Detallada por Producto</h3>
+                    <div class="overflow-x-auto custom-scrollbar bg-white rounded-xl border border-gray-200">
+                        <table class="min-w-full text-xs text-left text-gray-500 whitespace-nowrap">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
                                 <tr>
-                                    <th class="px-4 py-2.5">Producto</th>
-                                    <th class="px-4 py-2.5 text-center">Unidades Vendidas</th>
-                                    <th class="px-4 py-2.5 text-right">Ingresos Generados ($)</th>
-                                    <th class="px-4 py-2.5 text-right">% del Total Ingresos</th>
+                                    <th class="px-3 py-2.5">Producto</th>
+                                    <th class="px-3 py-2.5 text-center">Unidades</th>
+                                    <th class="px-3 py-2.5 text-right">Ingresos ($)</th>
+                                    <th class="px-3 py-2.5 text-right">% del Total</th>
                                 </tr>
                             </thead>
                             <tbody id="tabla-insights-body" class="divide-y">
@@ -469,45 +480,45 @@
 
             <!-- ACCORDEON: GRÁFICAS FINANCIERAS -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden transition-all">
-                <button onclick="toggleDesplegable('desplegable-graficas')" class="w-full bg-white text-slate-800 px-6 py-4 flex justify-between items-center hover:bg-slate-50 transition border-b border-transparent">
-                    <span class="font-bold text-base md:text-lg flex items-center gap-3">
-                        <span class="p-2 bg-green-50 text-green-600 rounded-lg"><i class="fa-solid fa-chart-column"></i></span>
-                        Gráficas Financieras (Semanal / Mensual / Proporción)
+                <button onclick="toggleDesplegable('desplegable-graficas')" class="w-full bg-white text-slate-800 p-4 sm:p-5 flex justify-between items-center hover:bg-slate-50 transition border-b border-transparent">
+                    <span class="font-bold text-sm sm:text-base md:text-lg flex items-center gap-2 sm:gap-3">
+                        <span class="p-1.5 sm:p-2 bg-green-50 text-green-600 rounded-lg text-sm sm:text-base"><i class="fa-solid fa-chart-column"></i></span>
+                        Gráficas Financieras
                     </span>
-                    <i id="icon-desplegable-graficas" class="fa-solid fa-chevron-down text-gray-400 text-lg transition-transform"></i>
+                    <i id="icon-desplegable-graficas" class="fa-solid fa-chevron-down text-gray-400 text-base sm:text-lg transition-transform"></i>
                 </button>
 
-                <div id="desplegable-graficas" class="hidden p-6 space-y-6 bg-slate-50 border-t border-gray-100">
+                <div id="desplegable-graficas" class="hidden p-3 sm:p-6 space-y-4 sm:space-y-6 bg-slate-50 border-t border-gray-100">
                     
-                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                        <div class="flex flex-wrap justify-between items-center gap-3 mb-4 border-b pb-3">
-                            <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
-                                <i class="fa-solid fa-calendar-days text-blue-600"></i> Comportamiento Temporal: Ingresos vs Inversión/Gastos
+                    <div class="bg-white p-3 sm:p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b pb-3">
+                            <h3 class="text-xs sm:text-sm font-bold text-gray-800 flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-days text-blue-600"></i> Comportamiento Temporal
                             </h3>
-                            <div class="flex bg-gray-100 p-1 rounded-lg text-xs font-bold">
-                                <button id="btn-periodo-semanal" onclick="cambiarPeriodoGrafica('semanal')" class="px-3 py-1 rounded-md bg-blue-600 text-white shadow">
-                                    Semanal (Esta Semana)
+                            <div class="flex bg-gray-100 p-1 rounded-lg text-xs font-bold w-full sm:w-auto">
+                                <button id="btn-periodo-semanal" onclick="cambiarPeriodoGrafica('semanal')" class="flex-1 sm:flex-none text-center px-3 py-1 rounded-md bg-blue-600 text-white shadow">
+                                    Semanal
                                 </button>
-                                <button id="btn-periodo-mensual" onclick="cambiarPeriodoGrafica('mensual')" class="px-3 py-1 rounded-md text-gray-600 hover:text-black">
-                                    Mensual (Año)
+                                <button id="btn-periodo-mensual" onclick="cambiarPeriodoGrafica('mensual')" class="flex-1 sm:flex-none text-center px-3 py-1 rounded-md text-gray-600 hover:text-black">
+                                    Mensual
                                 </button>
                             </div>
                         </div>
-                        <div class="relative h-72">
+                        <div class="relative h-60 sm:h-72">
                             <canvas id="chartTemporal"></canvas>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-white p-4 border border-gray-200 rounded-xl shadow-sm">
-                            <h3 class="text-xs font-bold text-gray-700 mb-4 text-center uppercase">Comparativa Global: Ingresos vs Gastos</h3>
-                            <div class="relative h-60">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div class="bg-white p-3 sm:p-4 border border-gray-200 rounded-xl shadow-sm">
+                            <h3 class="text-[11px] font-bold text-gray-700 mb-3 text-center uppercase">Comparativa Global</h3>
+                            <div class="relative h-52 sm:h-60">
                                 <canvas id="chartComparativa"></canvas>
                             </div>
                         </div>
-                        <div class="bg-white p-4 border border-gray-200 rounded-xl shadow-sm">
-                            <h3 class="text-xs font-bold text-gray-700 mb-4 text-center uppercase">Proporción Financiera de Caja</h3>
-                            <div class="relative h-60 flex justify-center">
+                        <div class="bg-white p-3 sm:p-4 border border-gray-200 rounded-xl shadow-sm">
+                            <h3 class="text-[11px] font-bold text-gray-700 mb-3 text-center uppercase">Proporción Financiera</h3>
+                            <div class="relative h-52 sm:h-60 flex justify-center">
                                 <canvas id="chartDoughnut"></canvas>
                             </div>
                         </div>
@@ -519,36 +530,36 @@
         </div>
 
         <!-- VISTA 2: INVENTARIO / STOCK -->
-        <div id="vista-inventario" class="hidden space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div id="vista-inventario" class="hidden space-y-4 sm:space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                 
                 <!-- FORMULARIO NUEVO PRODUCTO -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-1">
-                    <h2 class="text-lg font-bold mb-4 border-b pb-2"><i class="fa-solid fa-box-open text-blue-600"></i> Nuevo Producto</h2>
-                    <form id="producto-form" class="space-y-4">
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-1">
+                    <h2 class="text-base sm:text-lg font-bold mb-4 border-b pb-2"><i class="fa-solid fa-box-open text-blue-600"></i> Nuevo Producto</h2>
+                    <form id="producto-form" class="space-y-3 sm:space-y-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">Nombre del Producto</label>
-                            <input type="text" id="prod-nombre" placeholder="Ej. Chocolate / Bebida" class="w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm" required>
+                            <input type="text" id="prod-nombre" placeholder="Ej. Chocolate / Bebida" class="w-full rounded-lg border-gray-300 shadow-sm border p-2.5 text-xs sm:text-sm" required>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">Stock Inicial (Unidades)</label>
-                            <input type="number" id="prod-stock" min="1" placeholder="Ej. 20" class="w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm" required>
+                            <input type="number" id="prod-stock" min="1" placeholder="Ej. 20" class="w-full rounded-lg border-gray-300 shadow-sm border p-2.5 text-xs sm:text-sm" required>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">Precio Venta Unitario ($)</label>
-                            <input type="number" id="prod-precio" step="0.01" min="0.01" placeholder="Ej. 0.25" class="w-full rounded-md border-gray-300 shadow-sm border p-2 text-sm" required>
+                            <input type="number" id="prod-precio" step="0.01" min="0.01" placeholder="Ej. 0.25" class="w-full rounded-lg border-gray-300 shadow-sm border p-2.5 text-xs sm:text-sm" required>
                         </div>
-                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-                            <i class="fa-solid fa-plus"></i> Guardar Producto en Inventario
+                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2.5 px-4 rounded-xl hover:bg-blue-700 transition text-xs sm:text-sm">
+                            <i class="fa-solid fa-plus"></i> Guardar en Inventario
                         </button>
                     </form>
                 </div>
 
-                <!-- TABLA DE INVENTARIO -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
-                    <h2 class="text-lg font-bold mb-4 border-b pb-2"><i class="fa-solid fa-boxes-stacked text-blue-600"></i> Stock Actual de Productos</h2>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full text-xs text-left text-gray-500">
+                <!-- TABLA DE INVENTARIO RESPONSIVE -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2">
+                    <h2 class="text-base sm:text-lg font-bold mb-4 border-b pb-2"><i class="fa-solid fa-boxes-stacked text-blue-600"></i> Stock Actual de Productos</h2>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="min-w-full text-xs text-left text-gray-500 whitespace-nowrap">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
                                 <tr>
                                     <th class="px-3 py-2 font-bold">Producto</th>
@@ -571,7 +582,7 @@
     <!-- ÁREA DE IMPRESIÓN REPORTE -->
     <div id="print-area" class="hidden bg-white p-8">
         <div class="text-center mb-6 border-b-2 border-black pb-4">
-            <h1 class="text-2xl font-bold uppercase">Reporte Financiero Diario - Proyecto Cloud</h1>
+            <h1 class="text-2xl font-bold uppercase">Reporte Financiero Diario - SalesCloud</h1>
             <p class="text-lg">Fecha del Reporte: <span id="print-fecha" class="font-bold"></span></p>
         </div>
         
@@ -627,8 +638,6 @@
         let capitalInicial = parseFloat(localStorage.getItem('jaime_sales_capital_v6')) || 2.00;
         let movimientos = JSON.parse(localStorage.getItem('jaime_sales_movimientos_v6')) || [];
         let productos = JSON.parse(localStorage.getItem('jaime_sales_productos_v6')) || [];
-        
-        // REGLAS DE DISTRIBUCIÓN Y METAS (SISTEMA FINANCIERO)
         let reglasDistribucion = JSON.parse(localStorage.getItem('jaime_sales_reglas_v6')) || [];
         let metas = JSON.parse(localStorage.getItem('jaime_sales_metas_v6')) || [];
 
@@ -646,9 +655,8 @@
 
             if (isOpening) {
                 el.classList.remove('hidden');
-                icon.className = "fa-solid fa-chevron-up text-purple-400 text-lg transition-transform";
+                icon.className = "fa-solid fa-chevron-up text-purple-400 text-base sm:text-lg transition-transform";
                 
-                // MODO OSCURO TOTAL SI ES FINANZAS
                 if (id === 'desplegable-distribucion') {
                     document.body.classList.add('dark-mode');
                     renderizarReglas();
@@ -658,16 +666,15 @@
                 if (id === 'desplegable-graficas') renderizarGraficas();
             } else {
                 el.classList.add('hidden');
-                icon.className = "fa-solid fa-chevron-down text-gray-400 text-lg transition-transform";
+                icon.className = "fa-solid fa-chevron-down text-gray-400 text-base sm:text-lg transition-transform";
 
-                // VOLVER A MODO CLARO SI SE CIERRA FINANZAS
                 if (id === 'desplegable-distribucion') {
                     document.body.classList.remove('dark-mode');
                 }
             }
         }
 
-        // CAMBIAR SUB-PESTAÑAS DENTRO DE FINANZAS
+        // CAMBIAR SUB-PESTAÑAS EN FINANZAS
         function cambiarSubpestanaFinanzas(subpestana) {
             const reglasView = document.getElementById('subvista-reglas');
             const metasView = document.getElementById('subvista-metas');
@@ -677,19 +684,18 @@
             if (subpestana === 'reglas') {
                 reglasView.classList.remove('hidden');
                 metasView.classList.add('hidden');
-                btnReglas.className = "text-purple-400 border-b-2 border-purple-500 pb-1 flex items-center gap-2";
-                btnMetas.className = "text-gray-400 hover:text-purple-300 pb-1 flex items-center gap-2";
+                btnReglas.className = "text-purple-400 border-b-2 border-purple-500 pb-1 flex items-center gap-1.5";
+                btnMetas.className = "text-gray-400 hover:text-purple-300 pb-1 flex items-center gap-1.5";
                 renderizarReglas();
             } else {
                 metasView.classList.remove('hidden');
                 reglasView.classList.add('hidden');
-                btnMetas.className = "text-purple-400 border-b-2 border-purple-500 pb-1 flex items-center gap-2";
-                btnReglas.className = "text-gray-400 hover:text-purple-300 pb-1 flex items-center gap-2";
+                btnMetas.className = "text-purple-400 border-b-2 border-purple-500 pb-1 flex items-center gap-1.5";
+                btnReglas.className = "text-gray-400 hover:text-purple-300 pb-1 flex items-center gap-1.5";
                 renderizarMetas();
             }
         }
 
-        // EDITAR CAPITAL INICIAL
         function editarCapitalInicial() {
             const nuevoVal = prompt("Ingresa el nuevo Capital Inicial / Presupuesto Base ($):", capitalInicial.toFixed(2));
             if (nuevoVal !== null) {
@@ -712,7 +718,6 @@
             calcularMontoVenta();
         }
 
-        // NAVEGACIÓN SUPERIOR
         function cambiarPestana(pestana) {
             document.body.classList.remove('dark-mode');
 
@@ -722,10 +727,10 @@
                 const btn = document.getElementById(`tab-${v}-btn`);
                 if (v === pestana) {
                     el.classList.remove('hidden');
-                    btn.className = "px-4 py-1.5 rounded-md font-bold text-xs md:text-sm bg-blue-600 text-white shadow";
+                    btn.className = "flex-1 sm:flex-none text-center px-3 md:px-4 py-2 rounded-md font-bold bg-blue-600 text-white shadow";
                 } else {
                     el.classList.add('hidden');
-                    btn.className = "px-4 py-1.5 rounded-md font-bold text-xs md:text-sm text-blue-200 hover:text-white";
+                    btn.className = "flex-1 sm:flex-none text-center px-3 md:px-4 py-2 rounded-md font-bold text-blue-200 hover:text-white";
                 }
             });
 
@@ -753,7 +758,7 @@
                 campoVenta.classList.remove('hidden');
                 labelMonto.innerText = 'Monto Total ($)';
                 montoInput.readOnly = true;
-                btnGuardar.className = 'w-full bg-green-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-green-700 transition shadow-sm';
+                btnGuardar.className = 'w-full bg-green-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-green-700 active:bg-green-800 transition shadow-sm text-sm';
                 btnGuardar.innerText = 'Guardar Ingreso (Venta)';
                 alSeleccionarProducto();
             } else {
@@ -763,7 +768,7 @@
                 labelMonto.innerText = 'Monto Gastado / Invertido ($)';
                 montoInput.readOnly = false;
                 montoInput.value = '';
-                btnGuardar.className = 'w-full bg-red-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-red-700 transition shadow-sm';
+                btnGuardar.className = 'w-full bg-red-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-red-700 active:bg-red-800 transition shadow-sm text-sm';
                 btnGuardar.innerText = 'Guardar Inversión / Gasto';
                 ocultarAlertaStock();
             }
@@ -771,7 +776,7 @@
 
         function actualizarSelectProductos() {
             const select = document.getElementById('producto-select');
-            select.innerHTML = '<option value="">-- Selecciona un producto --</option>';
+            select.innerHTML = '<option value="">-- Selecciona producto --</option>';
             productos.forEach(p => {
                 const opt = document.createElement('option');
                 opt.value = p.id;
@@ -810,9 +815,9 @@
             if (producto) {
                 document.getElementById('monto-total').value = (cant * precio).toFixed(2);
                 if (cant > producto.stock) {
-                    mostrarAlertaStock(`¡Stock insuficiente! Solo tienes ${producto.stock} unidad(es) de ${producto.nombre}.`);
+                    mostrarAlertaStock(`¡Stock insuficiente! Solo tienes ${producto.stock} unidad(es).`);
                 } else if(producto.stock === 0) {
-                    mostrarAlertaStock(`¡Sin stock! No tienes existencias de ${producto.nombre}.`);
+                    mostrarAlertaStock(`¡Sin stock disponible de este producto!`);
                 } else {
                     ocultarAlertaStock();
                 }
@@ -835,7 +840,6 @@
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
 
-        // GUARDAR MOVIMIENTO
         document.getElementById('movimiento-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -868,12 +872,12 @@
             } else {
                 concepto = document.getElementById('concepto').value;
                 if(!concepto.trim()){
-                    alert("Por favor ingresa el concepto de la inversión o gasto.");
+                    alert("Por favor ingresa el concepto del gasto.");
                     return;
                 }
             }
 
-            const nuevoMovimiento = {
+            movimientos.push({
                 id: Date.now(),
                 tipo: tipo,
                 fecha: fecha,
@@ -881,9 +885,8 @@
                 monto: monto,
                 productoId: productoId,
                 cantidad: cantidadVendida
-            };
+            });
 
-            movimientos.push(nuevoMovimiento);
             guardarEstado();
             
             document.getElementById('concepto').value = '';
@@ -894,21 +897,19 @@
             ocultarAlertaStock();
         });
 
-        // INVENTARIO: REGISTRAR PRODUCTO
         document.getElementById('producto-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const nombre = document.getElementById('prod-nombre').value.trim();
             const stock = parseInt(document.getElementById('prod-stock').value);
             const precio = parseFloat(document.getElementById('prod-precio').value);
 
-            const nuevoProd = {
+            productos.push({
                 id: Date.now(),
                 nombre: nombre,
                 stock: stock,
                 precio: precio
-            };
+            });
 
-            productos.push(nuevoProd);
             guardarEstado();
 
             document.getElementById('prod-nombre').value = '';
@@ -939,7 +940,7 @@
             const mov = movimientos.find(m => m.id === id);
             if (!mov) return;
 
-            const nuevoConcepto = prompt("Editar concepto del movimiento:", mov.concepto);
+            const nuevoConcepto = prompt("Editar concepto:", mov.concepto);
             if (nuevoConcepto === null) return;
 
             const nuevoMonto = prompt("Editar monto ($):", mov.monto.toFixed(2));
@@ -955,20 +956,17 @@
                 mov.fecha = nuevaFecha;
                 guardarEstado();
             } else {
-                alert("Datos no válidos para la edición.");
+                alert("Datos no válidos.");
             }
         }
 
         function eliminarMovimiento(id) {
-            if(confirm("¿Eliminar este movimiento del historial?")){
+            if(confirm("¿Eliminar este movimiento?")){
                 movimientos = movimientos.filter(m => m.id !== id);
                 guardarEstado();
             }
         }
 
-        // ==========================================
-        // GESTIÓN DE REGLAS DE DISTRIBUCIÓN
-        // ==========================================
         function cambiarTipoReglaLabel() {
             const tipo = document.getElementById('regla-tipo').value;
             const label = document.getElementById('regla-valor-label');
@@ -991,25 +989,18 @@
             const frecuencia = document.getElementById('regla-frecuencia').value;
 
             if (!nombre || isNaN(valor) || valor <= 0) {
-                alert("Proporciona datos válidos para la regla.");
+                alert("Proporciona datos válidos.");
                 return;
             }
 
-            reglasDistribucion.push({
-                id: Date.now(),
-                nombre,
-                tipo,
-                valor,
-                frecuencia
-            });
-
+            reglasDistribucion.push({ id: Date.now(), nombre, tipo, valor, frecuencia });
             guardarEstado();
             document.getElementById('regla-nombre').value = '';
             document.getElementById('regla-valor').value = '';
         });
 
         function eliminarRegla(id) {
-            if (confirm("¿Deseas eliminar esta regla de distribución?")) {
+            if (confirm("¿Eliminar esta regla?")) {
                 reglasDistribucion = reglasDistribucion.filter(r => r.id !== id);
                 guardarEstado();
             }
@@ -1020,7 +1011,7 @@
             tbody.innerHTML = '';
 
             if (reglasDistribucion.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400">No hay reglas de distribución configuradas. Agrégalas manualmente.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400">No hay reglas configuradas.</td></tr>`;
             } else {
                 reglasDistribucion.forEach(r => {
                     const tr = document.createElement('tr');
@@ -1048,7 +1039,7 @@
             const mesesMap = {};
 
             movimientos.forEach(m => {
-                const mesKey = m.fecha.substring(0, 7); // YYYY-MM
+                const mesKey = m.fecha.substring(0, 7);
                 if (!mesesMap[mesKey]) {
                     mesesMap[mesKey] = { ingresos: 0, gastos: 0 };
                 }
@@ -1059,7 +1050,7 @@
             const listaMeses = Object.keys(mesesMap).sort().reverse();
 
             if (listaMeses.length === 0) {
-                contenedor.innerHTML = `<div class="col-span-full text-center py-6 text-gray-400">No hay registros suficientes para calcular el desglose por mes.</div>`;
+                contenedor.innerHTML = `<div class="col-span-full text-center py-4 text-gray-400 text-xs">Aún no hay suficientes registros mensuales.</div>`;
                 return;
             }
 
@@ -1085,21 +1076,21 @@
 
                     reglasHTML += `
                         <div class="flex justify-between items-center text-xs py-1.5 border-b border-slate-700">
-                            <span class="font-bold flex items-center gap-1.5">
-                                <i class="fa-solid fa-angle-right text-purple-400"></i> ${r.nombre} (${r.tipo === 'PORCENTAJE' ? r.valor + '%' : '$' + r.valor})
+                            <span class="font-bold flex items-center gap-1.5 truncate">
+                                <i class="fa-solid fa-angle-right text-purple-400"></i> ${r.nombre}
                             </span>
-                            <span class="font-extrabold text-purple-300">${formatearMoneda(montoDeducido)}</span>
+                            <span class="font-extrabold text-purple-300 ml-2">${formatearMoneda(montoDeducido)}</span>
                         </div>
                     `;
                 });
 
                 const card = document.createElement('div');
-                card.className = "bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-3";
+                card.className = "bg-slate-800 p-3.5 sm:p-4 rounded-xl border border-slate-700 space-y-3";
                 card.innerHTML = `
                     <div class="border-b border-slate-700 pb-2 flex justify-between items-center">
-                        <span class="font-bold capitalize text-sm text-purple-300"><i class="fa-regular fa-calendar"></i> ${nombreMes}</span>
-                        <span class="text-xs px-2 py-0.5 rounded font-bold ${gananciaMes >= 0 ? 'bg-green-900/60 text-green-300 border border-green-700' : 'bg-red-900/60 text-red-300 border border-red-700'}">
-                            Ganancia: ${formatearMoneda(gananciaMes)}
+                        <span class="font-bold capitalize text-xs sm:text-sm text-purple-300"><i class="fa-regular fa-calendar"></i> ${nombreMes}</span>
+                        <span class="text-[10px] sm:text-xs px-2 py-0.5 rounded font-bold ${gananciaMes >= 0 ? 'bg-green-900/60 text-green-300 border border-green-700' : 'bg-red-900/60 text-red-300 border border-red-700'}">
+                            ${formatearMoneda(gananciaMes)}
                         </span>
                     </div>
                     <div class="space-y-1">
@@ -1114,16 +1105,13 @@
             });
         }
 
-        // ==========================================
-        // GESTIÓN DE METAS FINANCIERAS
-        // ==========================================
         document.getElementById('meta-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const nombre = document.getElementById('meta-nombre').value.trim();
             const montoObjetivo = parseFloat(document.getElementById('meta-monto-objetivo').value);
 
             if (!nombre || isNaN(montoObjetivo) || montoObjetivo <= 0) {
-                alert("Por favor ingresa un nombre y un monto objetivo válidos.");
+                alert("Proporciona datos válidos.");
                 return;
             }
 
@@ -1145,7 +1133,7 @@
             if (!meta || meta.completada) return;
 
             const restante = meta.montoObjetivo - meta.montoActual;
-            const montoStr = prompt(`¿Cuánto dinero deseas abonar/aportar a la meta "${meta.nombre}"?\nRestante para completar: ${formatearMoneda(restante)}`);
+            const montoStr = prompt(`Abonar a "${meta.nombre}":\nRestante: ${formatearMoneda(restante)}`);
             if (montoStr === null) return;
 
             const monto = parseFloat(montoStr);
@@ -1164,17 +1152,16 @@
             const meta = metas.find(m => m.id === id);
             if (!meta) return;
 
-            if (confirm(`🎉 ¿Confirmas realizar la compra / completar la meta "${meta.nombre}" por valor de ${formatearMoneda(meta.montoObjetivo)}?\nEsto se registrará automáticamente como un GASTO en el Historial de Movimientos.`)) {
+            if (confirm(`🎉 ¿Confirmas realizar la compra de "${meta.nombre}" por ${formatearMoneda(meta.montoObjetivo)}?\nSe registrará como un GASTO en el historial.`)) {
                 meta.completada = true;
                 meta.montoActual = meta.montoObjetivo;
 
-                // Agregar movimiento automático de gasto
                 const fechaHoy = new Date().toISOString().split('T')[0];
                 movimientos.push({
                     id: Date.now(),
                     tipo: 'INVERSION',
                     fecha: fechaHoy,
-                    concepto: `Meta Alcanzada / Compra: ${meta.nombre}`,
+                    concepto: `Meta Alcazada: ${meta.nombre}`,
                     monto: meta.montoObjetivo,
                     productoId: null,
                     cantidad: 0
@@ -1185,7 +1172,7 @@
         }
 
         function eliminarMeta(id) {
-            if (confirm("¿Deseas eliminar esta meta financiera?")) {
+            if (confirm("¿Eliminar esta meta?")) {
                 metas = metas.filter(m => m.id !== id);
                 guardarEstado();
             }
@@ -1196,7 +1183,7 @@
             contenedor.innerHTML = '';
 
             if (metas.length === 0) {
-                contenedor.innerHTML = `<div class="col-span-full text-center py-6 text-gray-400">No hay metas financieras registradas. Agrega una desde el formulario.</div>`;
+                contenedor.innerHTML = `<div class="col-span-full text-center py-6 text-gray-400 text-xs">No hay metas activas.</div>`;
                 return;
             }
 
@@ -1205,38 +1192,38 @@
                 const estaLista = m.montoActual >= m.montoObjetivo || m.completada;
 
                 const card = document.createElement('div');
-                card.className = `p-4 rounded-xl border ${m.completada ? 'bg-green-950/40 border-green-700' : 'bg-slate-800 border-slate-700'} space-y-3 relative`;
+                card.className = `p-3.5 sm:p-4 rounded-xl border ${m.completada ? 'bg-green-950/40 border-green-700' : 'bg-slate-800 border-slate-700'} space-y-3 relative`;
                 
                 card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h4 class="font-extrabold text-sm ${m.completada ? 'text-green-300 line-through' : 'text-purple-300'}">${m.nombre}</h4>
-                            <p class="text-xs text-gray-400">Objetivo: <span class="font-bold text-white">${formatearMoneda(m.montoObjetivo)}</span></p>
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="truncate">
+                            <h4 class="font-extrabold text-xs sm:text-sm ${m.completada ? 'text-green-300 line-through' : 'text-purple-300'} truncate">${m.nombre}</h4>
+                            <p class="text-[11px] text-gray-400">Meta: <span class="font-bold text-white">${formatearMoneda(m.montoObjetivo)}</span></p>
                         </div>
-                        <button onclick="eliminarMeta(${m.id})" class="text-red-400 hover:text-red-600 text-xs" title="Eliminar Meta"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="eliminarMeta(${m.id})" class="text-red-400 hover:text-red-600 text-xs p-1" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                     </div>
 
                     <div>
-                        <div class="flex justify-between text-xs font-bold mb-1">
+                        <div class="flex justify-between text-[11px] font-bold mb-1">
                             <span>Ahorrado: ${formatearMoneda(m.montoActual)}</span>
                             <span class="${estaLista ? 'text-green-400' : 'text-purple-400'}">${pct}%</span>
                         </div>
-                        <div class="w-full bg-slate-700 rounded-full h-2.5 overflow-hidden">
-                            <div class="${estaLista ? 'bg-green-500' : 'bg-purple-500'} h-2.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                        <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                            <div class="${estaLista ? 'bg-green-500' : 'bg-purple-500'} h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
                         </div>
                     </div>
 
-                    <div class="pt-2 flex gap-2 justify-end">
+                    <div class="pt-1 flex gap-2 justify-end">
                         ${m.completada ? `
-                            <span class="bg-green-900/80 text-green-300 border border-green-600 px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
-                                <i class="fa-solid fa-circle-check"></i> Meta Completada y Registrada
+                            <span class="bg-green-900/80 text-green-300 border border-green-600 px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-circle-check"></i> Meta Completada
                             </span>
                         ` : `
-                            <button onclick="aportarAMeta(${m.id})" class="bg-purple-700 hover:bg-purple-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold flex items-center gap-1">
+                            <button onclick="aportarAMeta(${m.id})" class="bg-purple-700 hover:bg-purple-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold flex items-center gap-1">
                                 <i class="fa-solid fa-hand-holding-dollar"></i> Aportar
                             </button>
-                            <button onclick="completarMeta(${m.id})" class="bg-green-600 hover:bg-green-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 shadow">
-                                <i class="fa-solid fa-cart-shopping"></i> Completado
+                            <button onclick="completarMeta(${m.id})" class="bg-green-600 hover:bg-green-500 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold flex items-center gap-1 shadow">
+                                <i class="fa-solid fa-cart-shopping"></i> Completar
                             </button>
                         `}
                     </div>
@@ -1250,7 +1237,7 @@
             tbody.innerHTML = '';
 
             if (productos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-400">No hay productos en inventario. Agrega uno arriba.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-400">No hay productos en inventario.</td></tr>`;
                 return;
             }
 
@@ -1266,26 +1253,26 @@
                     icono = '<i class="fa-solid fa-circle-xmark text-red-600"></i>';
                 } else if (p.stock < 5) {
                     badgeStyle = 'bg-amber-100 text-amber-800 border border-amber-300';
-                    icono = '<i class="fa-solid fa-triangle-exclamation text-amber-600 animate-pulse"></i>';
+                    icono = '<i class="fa-solid fa-triangle-exclamation text-amber-600"></i>';
                 } else {
                     badgeStyle = 'bg-green-100 text-green-700 border border-green-300';
                     icono = '<i class="fa-solid fa-circle-check text-green-600"></i>';
                 }
 
                 tr.innerHTML = `
-                    <td class="px-3 py-2 font-bold text-gray-800">${p.nombre}</td>
-                    <td class="px-3 py-2 text-center">
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${badgeStyle}">
+                    <td class="px-3 py-2.5 font-bold text-gray-800">${p.nombre}</td>
+                    <td class="px-3 py-2.5 text-center">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold ${badgeStyle}">
                             ${icono}
                             <span>${p.stock} unids.</span>
                         </span>
                     </td>
-                    <td class="px-3 py-2 text-right font-bold text-gray-700">${formatearMoneda(p.precio)}</td>
-                    <td class="px-3 py-2 text-center space-x-1">
-                        <button onclick="agregarStockProd(${p.id})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded text-xs font-bold shadow-sm" title="Sumar Stock">
-                            <i class="fa-solid fa-plus"></i> Stock
+                    <td class="px-3 py-2.5 text-right font-bold text-gray-700">${formatearMoneda(p.precio)}</td>
+                    <td class="px-3 py-2.5 text-center space-x-1">
+                        <button onclick="agregarStockProd(${p.id})" class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded text-xs font-bold shadow-sm">
+                            <i class="fa-solid fa-plus"></i>
                         </button>
-                        <button onclick="eliminarProducto(${p.id})" class="text-red-400 hover:text-red-600 px-1" title="Eliminar Producto"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="eliminarProducto(${p.id})" class="text-red-400 hover:text-red-600 px-1"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1303,6 +1290,7 @@
 
         function actualizarUI() {
             document.getElementById('nav-capital-text').innerText = formatearMoneda(capitalInicial);
+            document.getElementById('nav-capital-text-mobile').innerText = formatearMoneda(capitalInicial);
             document.getElementById('caja-base-subtext').innerText = formatearMoneda(capitalInicial);
 
             let tIngresos = 0, tInversion = 0;
@@ -1335,8 +1323,8 @@
                         ${esIngreso ? '+' : '-'}${formatearMoneda(m.monto)}
                     </td>
                     <td class="px-3 py-2.5 text-center space-x-1">
-                        <button onclick="editarMovimiento(${m.id})" class="text-blue-500 hover:text-blue-700 px-1" title="Editar Movimiento"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="eliminarMovimiento(${m.id})" class="text-red-400 hover:text-red-600 px-1" title="Eliminar Movimiento"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editarMovimiento(${m.id})" class="text-blue-500 hover:text-blue-700 px-1"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="eliminarMovimiento(${m.id})" class="text-red-400 hover:text-red-600 px-1"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1350,11 +1338,11 @@
             document.getElementById('kpi-ingresos').innerText = formatearMoneda(tIngresos);
             document.getElementById('kpi-inversion').innerText = formatearMoneda(tInversion);
             document.getElementById('kpi-utilidad').innerText = formatearMoneda(utilidadNeta);
-            document.getElementById('kpi-utilidad').className = `text-xl font-bold ${utilidadNeta >= 0 ? 'text-blue-600' : 'text-red-600'}`;
+            document.getElementById('kpi-utilidad').className = `text-base sm:text-xl font-bold ${utilidadNeta >= 0 ? 'text-blue-600' : 'text-red-600'}`;
 
             const kpiRoi = document.getElementById('kpi-roi');
             kpiRoi.innerText = `${roi >= 0 ? '+' : ''}${roi.toFixed(2)}%`;
-            kpiRoi.className = `text-xl font-bold ${roi >= 0 ? 'text-purple-600' : 'text-red-600'}`;
+            kpiRoi.className = `text-base sm:text-xl font-bold ${roi >= 0 ? 'text-purple-600' : 'text-red-600'}`;
 
             actualizarSelectProductos();
             actualizarTablaInventario();
@@ -1386,10 +1374,10 @@
                 totalIngresosVentas += m.monto;
             });
 
-            let topProdVolumen = 'Ninguno aún';
+            let topProdVolumen = 'Ninguno';
             let maxCant = 0;
 
-            let topProdRentable = 'Ninguno aún';
+            let topProdRentable = 'Ninguno';
             let maxMontoGenerado = 0;
 
             Object.keys(stats).forEach(p => {
@@ -1404,10 +1392,10 @@
             });
 
             document.getElementById('insight-top-producto').innerText = topProdVolumen;
-            document.getElementById('insight-top-cant').innerText = `${maxCant} unidades vendidas`;
+            document.getElementById('insight-top-cant').innerText = `${maxCant} unids.`;
 
             document.getElementById('insight-rentable-producto').innerText = topProdRentable;
-            document.getElementById('insight-rentable-monto').innerText = `${formatearMoneda(maxMontoGenerado)} generados`;
+            document.getElementById('insight-rentable-monto').innerText = `${formatearMoneda(maxMontoGenerado)}`;
 
             document.getElementById('insight-total-unidades').innerText = `${totalUnidades} unids.`;
             document.getElementById('insight-variedad').innerText = `${Object.keys(stats).length} ítems`;
@@ -1416,7 +1404,7 @@
             tbody.innerHTML = '';
 
             if (Object.keys(stats).length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-400">Aún no se registran ventas para generar insights.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-400">Sin datos de ventas.</td></tr>`;
                 return;
             }
 
@@ -1426,12 +1414,12 @@
                 const pct = totalIngresosVentas > 0 ? ((stats[p].ingresos / totalIngresosVentas) * 100).toFixed(1) : '0.0';
                 
                 tr.innerHTML = `
-                    <td class="px-4 py-2.5 font-bold text-gray-800 flex items-center gap-2">
+                    <td class="px-3 py-2.5 font-bold text-gray-800 flex items-center gap-1.5">
                         ${p === topProdRentable ? '⭐' : ''} ${p}
                     </td>
-                    <td class="px-4 py-2.5 text-center font-bold text-blue-600">${stats[p].unidades} unids.</td>
-                    <td class="px-4 py-2.5 text-right font-bold text-green-600">${formatearMoneda(stats[p].ingresos)}</td>
-                    <td class="px-4 py-2.5 text-right font-semibold text-purple-600">${pct}%</td>
+                    <td class="px-3 py-2.5 text-center font-bold text-blue-600">${stats[p].unidades} unids.</td>
+                    <td class="px-3 py-2.5 text-right font-bold text-green-600">${formatearMoneda(stats[p].ingresos)}</td>
+                    <td class="px-3 py-2.5 text-right font-semibold text-purple-600">${pct}%</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1443,11 +1431,11 @@
             const btnMen = document.getElementById('btn-periodo-mensual');
 
             if (periodo === 'semanal') {
-                btnSem.className = "px-3 py-1 rounded-md bg-blue-600 text-white shadow font-bold";
-                btnMen.className = "px-3 py-1 rounded-md text-gray-600 hover:text-black font-bold";
+                btnSem.className = "flex-1 sm:flex-none text-center px-3 py-1 rounded-md bg-blue-600 text-white shadow font-bold";
+                btnMen.className = "flex-1 sm:flex-none text-center px-3 py-1 rounded-md text-gray-600 hover:text-black font-bold";
             } else {
-                btnMen.className = "px-3 py-1 rounded-md bg-blue-600 text-white shadow font-bold";
-                btnSem.className = "px-3 py-1 rounded-md text-gray-600 hover:text-black font-bold";
+                btnMen.className = "flex-1 sm:flex-none text-center px-3 py-1 rounded-md bg-blue-600 text-white shadow font-bold";
+                btnSem.className = "flex-1 sm:flex-none text-center px-3 py-1 rounded-md text-gray-600 hover:text-black font-bold";
             }
 
             renderizarGraficaTemporal();
@@ -1497,13 +1485,13 @@
                             label: 'Ingresos ($)',
                             data: dataIngresos,
                             backgroundColor: '#22c55e',
-                            borderRadius: 6
+                            borderRadius: 4
                         },
                         {
-                            label: 'Inversión / Gastos ($)',
+                            label: 'Gastos ($)',
                             data: dataGastos,
                             backgroundColor: '#ef4444',
-                            borderRadius: 6
+                            borderRadius: 4
                         }
                     ]
                 },
@@ -1529,12 +1517,12 @@
             chartBarInstance = new Chart(ctxBar, {
                 type: 'bar',
                 data: {
-                    labels: ['Ingresos (Ventas)', 'Inversión / Gastos'],
+                    labels: ['Ingresos', 'Gastos'],
                     datasets: [{
-                        label: 'Monto Total ($)',
+                        label: 'Total ($)',
                         data: [tIngresos, tInversion],
                         backgroundColor: ['#16a34a', '#dc2626'],
-                        borderRadius: 8
+                        borderRadius: 6
                     }]
                 },
                 options: {
@@ -1548,7 +1536,7 @@
             chartDoughnutInstance = new Chart(ctxDoughnut, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Capital Base', 'Ingresos', 'Gastos'],
+                    labels: ['Base', 'Ingresos', 'Gastos'],
                     datasets: [{
                         data: [capitalInicial, tIngresos, tInversion],
                         backgroundColor: ['#3b82f6', '#22c55e', '#ef4444']
@@ -1568,7 +1556,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(paquete, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `respaldo_ventas_jaime_${new Date().toISOString().split('T')[0]}.json`);
+            downloadAnchor.setAttribute("download", `respaldo_salescloud_${new Date().toISOString().split('T')[0]}.json`);
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
@@ -1585,16 +1573,16 @@
                     if(datos.reglasDistribucion) reglasDistribucion = datos.reglasDistribucion;
                     if(datos.metas) metas = datos.metas;
                     guardarEstado();
-                    alert("¡Datos, reglas y metas importados con éxito!");
+                    alert("¡Respaldo importado correctamente!");
                 } catch(err) {
-                    alert("Error al leer el archivo de respaldo.");
+                    alert("Error al procesar el archivo JSON.");
                 }
             };
             fileReader.readAsText(event.target.files[0]);
         }
 
         function limpiarDatos() {
-            if(confirm("⚠️ ¿Restablecer todos los datos, inventario, reglas, metas y reiniciar presupuesto?")){
+            if(confirm("⚠️ ¿Deseas reiniciar toda la aplicación y borrar los registros guardados?")){
                 movimientos = [];
                 productos = [];
                 reglasDistribucion = [];
@@ -1605,12 +1593,12 @@
         }
 
         function prepararReporte() {
-            const fechaReporte = prompt("Ingrese la fecha para el reporte (YYYY-MM-DD):", new Date().toISOString().split('T')[0]);
+            const fechaReporte = prompt("Fecha para el reporte (YYYY-MM-DD):", new Date().toISOString().split('T')[0]);
             if(!fechaReporte) return;
 
             const movimientosDia = movimientos.filter(m => m.fecha === fechaReporte);
             if(movimientosDia.length === 0) {
-                alert("No hay movimientos registrados en esa fecha.");
+                alert("No hay registros en la fecha seleccionada.");
                 return;
             }
 
