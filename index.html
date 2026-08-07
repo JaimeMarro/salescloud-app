@@ -273,10 +273,6 @@
                 </div>
             </div>
 
-            <!-- ======================================================== -->
-            <!-- ACCORDEONES CON RESPONSIVE OPTIMIZADO                    -->
-            <!-- ======================================================== -->
-
             <!-- MÓDULO FINANZAS (REGLAS DE DISTRIBUCIÓN & METAS) CON MODO OSCURO -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden transition-all">
                 <button onclick="toggleDesplegable('desplegable-distribucion')" class="w-full bg-white text-slate-800 p-4 sm:p-5 flex justify-between items-center hover:bg-slate-50 transition border-b border-transparent">
@@ -1355,21 +1351,46 @@
             if(!document.getElementById('desplegable-graficas').classList.contains('hidden')) renderizarGraficas();
         }
 
+        // FUNCIÓN MEJORADA Y CORREGIDA PARA INSIGHTS DE RENTABILIDAD
         function renderizarInsights() {
             const stats = {};
             let totalUnidades = 0;
             let totalIngresosVentas = 0;
 
-            movimientos.filter(m => m.tipo === 'INGRESO').forEach(m => {
-                let nombreProd = m.concepto.replace(/^Venta \d+x\s*/, '').trim();
-                let cant = m.cantidad || 1;
-                
+            const ventas = movimientos.filter(m => m.tipo === 'INGRESO');
+
+            ventas.forEach(m => {
+                let nombreProd = '';
+                let cant = m.cantidad || 0;
+
+                // 1. Identificar por referencia a Producto
+                if (m.productoId) {
+                    const pEncontrado = productos.find(p => p.id == m.productoId);
+                    if (pEncontrado) {
+                        nombreProd = pEncontrado.nombre;
+                    }
+                }
+
+                // 2. Si no hay ID o fue eliminado, procesar el texto del concepto
+                if (!nombreProd) {
+                    const match = m.concepto.match(/^Venta (\d+)x\s*(.*)$/i);
+                    if (match) {
+                        if (!cant) cant = parseInt(match[1]);
+                        nombreProd = match[2].trim();
+                    } else {
+                        nombreProd = m.concepto.trim();
+                    }
+                }
+
+                if (!cant) cant = 1;
+
                 if (!stats[nombreProd]) {
                     stats[nombreProd] = { unidades: 0, ingresos: 0 };
                 }
+
                 stats[nombreProd].unidades += cant;
                 stats[nombreProd].ingresos += m.monto;
-                
+
                 totalUnidades += cant;
                 totalIngresosVentas += m.monto;
             });
